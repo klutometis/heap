@@ -1,0 +1,3 @@
+* TODO SRFI
+  Why aren't there SRFIs about the fundamental datatypes: queues,
+  stacks, heaps?
