@@ -1,0 +1,7 @@
+(compile -d0 -O2 -J -s heap.scm)
+(compile -d0 -O2 -s heap.import.scm)
+
+(install-extension
+ 'heap
+ '("heap.so" "heap.import.so")
+ '((version "0.0.1")))

@@ -1,0 +1,7 @@
+((synopsis "A straight-forward heap with destructive operations")
+ (author "Peter Danenberg")
+ (category data)
+ (license "BSD")
+ (depends)
+ (test-depends)
+ (foreign-depends))
