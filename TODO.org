@@ -1,3 +1,6 @@
 * TODO SRFI
   Why aren't there SRFIs about the fundamental datatypes: queues,
   stacks, heaps?
+* TODO Use vectors instead of lists.
+* TODO Dynamic resizing
+  Do it exponentially.
