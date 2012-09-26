@@ -73,6 +73,10 @@
             '#(16 14 10 8 7 9 3 2 4 1)
             (vector-map (lambda (i e) ((heap-key heap) e)) (heap-data heap))))
     
+    (let ((heap (figure-6.2)))
+      (heapify! heap 1)
+      (test-figure-6.2 "heapify!" heap))
+    
   #+END_SRC
 * TODO Dynamic resizing
   Do it exponentially.
