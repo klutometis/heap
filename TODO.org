@@ -55,6 +55,15 @@
            (heap (make-heap > +inf car set-car! figure-6.2 (vector-length figure-6.2))))
       (heapify! heap 1)
       (test '#(16 14 10 8 7 9 3 2 4 1)
+    (define make-max-heap
+      (case-lambda
+       (()
+        (make-max-heap car set-car!))
+       ((key key-set!)
+        (make-max-heap key key-set! (vector)))
+       ((key key-set! data)
+        (make-heap > -inf key key-set! data (vector-length data)))))
+    
             (vector-map (lambda (i e) ((heap-key heap) e)) (heap-data heap))))
     
   #+END_SRC
