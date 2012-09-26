@@ -77,7 +77,9 @@
         ;; heap? In which case: use the constructor directly.
         ;;
         ;; Should we build the heap automatically?
-        (make-heap > -inf key key-set! data 0))))
+        (make-max-heap key key-set! data (vector-length data)))
+       ((key key-set! data size)
+        (make-heap > -inf key key-set! data length))))
     
     (define (figure-6.2)
       (let ((data (list->vector (map list '(16 4 10 14 7 9 3 2 8 1)))))
