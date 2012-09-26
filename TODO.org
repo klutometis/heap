@@ -1,5 +1,6 @@
 * TODO Use =max= instead of =extremum=?
   I.e., with the understanding that it's inverted in a min-heap.
+* TODO Membership testing with an adherent hash-table?
 * TODO SRFI
   Why aren't there SRFIs about the fundamental datatypes: queues,
   stacks, heaps?
