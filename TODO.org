@@ -139,6 +139,10 @@
                 (heap-swap! heap i (parent i))))
             (error "Key violates heap-gradient -- HEAP-CHANGE-KEY!"))))
     
+    (define (figure-6.5)
+      (let ((data (list->vector (map list '(16 14 10 8 7 9 3 2 4 1)))))
+        (make-max-heap car set-car! data)))
+    
   #+END_SRC
 * TODO Dynamic resizing
   Do it exponentially.
