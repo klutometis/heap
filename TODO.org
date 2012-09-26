@@ -71,7 +71,7 @@
        (()
         (make-max-heap car set-car!))
        ((key key-set!)
-        (make-max-heap key key-set! (make-vector (initial-heap-size))))
+        (make-max-heap key key-set! (make-vector (initial-heap-size)) 0))
        ((key key-set! data)
         ;; It's always 0 here, isn't it, unless we're passing in a valid
         ;; heap? In which case: use the constructor directly.
