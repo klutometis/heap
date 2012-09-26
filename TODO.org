@@ -77,6 +77,17 @@
       (heapify! heap 1)
       (test-figure-6.2 "heapify!" heap))
     
+    (define (build-heap! heap)
+      (heap-size-set! heap (vector-length (heap-data heap)))
+      (let ((median (inexact->exact (floor (/ (heap-size heap) 2)))))
+        ;; Should be i - 1 here?
+        (do ((i (sub1 median) (sub1 i)))
+            ((negative? i))
+          (heapify! heap i))))
+    
+    (let ((heap (figure-6.2)))
+      (build-heap! heap)
+      (test-figure-6.2 "build-heap!" heap))
   #+END_SRC
 * TODO Dynamic resizing
   Do it exponentially.
