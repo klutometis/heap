@@ -126,6 +126,19 @@
             '#((14) (8) (10) (4) (7) (9) (3) (2) (1) (1))
             (heap-data heap)))
     
+    (define (heap-change-key! heap i key)
+      (let ((heap->? (heap->? heap))
+            (heap-key (heap-key heap)))
+        (if (heap->? key (heap-key (heap-ref heap i)))
+            (begin
+              ((heap-key-set! heap) (heap-ref heap i) key)
+              (do ((i i (parent i)))
+                  ((or (negative? i)
+                       (heap->? (heap-key (heap-ref heap (parent i)))
+                                (heap-key (heap-ref heap i)))))
+                (heap-swap! heap i (parent i))))
+            (error "Key violates heap-gradient -- HEAP-CHANGE-KEY!"))))
+    
   #+END_SRC
 * TODO Dynamic resizing
   Do it exponentially.
