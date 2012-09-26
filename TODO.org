@@ -6,7 +6,11 @@
   stacks, heaps?
 * TODO Use vectors instead of lists.
   #+BEGIN_SRC scheme
-    (use debug test vector-lib (only aima define-record-and-printer))
+    (use (only aima define-record-and-printer)
+         debug
+         miscmacros
+         test
+         vector-lib)
     
     (define (parent i)
       (- (inexact->exact (floor (/ (+ i 1) 2))) 1))
