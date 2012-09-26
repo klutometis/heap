@@ -51,10 +51,6 @@
     
     (define-record-and-printer element key datum)
     
-    (let* ((figure-6.2 (list->vector (map list '(16 4 10 14 7 9 3 2 8 1))))
-           (heap (make-heap > +inf car set-car! figure-6.2 (vector-length figure-6.2))))
-      (heapify! heap 1)
-      (test '#(16 14 10 8 7 9 3 2 4 1)
     (define make-max-heap
       (case-lambda
        (()
