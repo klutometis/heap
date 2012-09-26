@@ -97,6 +97,15 @@
     (define (heap-extremum heap)
       (heap-ref heap 0))
     
+    (define (heap-extract-extremum! heap)
+      (if (zero? (heap-size heap))
+          (error "Heap underflow -- HEAP-EXTRACT-EXTREMUM!")
+          (let ((extremum (heap-extremum heap)))
+            (heap-set! heap 0 (heap-ref heap (- (heap-size heap) 1)))
+            (heap-size-set! heap (- (heap-size heap) 1))
+            (heapify! heap 0)
+            extremum)))
+    
   #+END_SRC
 * TODO Dynamic resizing
   Do it exponentially.
