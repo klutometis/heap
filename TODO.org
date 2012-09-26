@@ -106,6 +106,14 @@
             (heapify! heap 0)
             extremum)))
     
+    (let ((heap (figure-6.2)))
+      (build-heap! heap)
+      (test "heap-extremum" '(16) (heap-extremum heap))
+      (test "heap-extract-extremum! -- extremum" '(16) (heap-extract-extremum! heap))
+      (test "heap-extract-extremum! -- data"
+            '#((14) (8) (10) (4) (7) (9) (3) (2) (1) (1))
+            (heap-data heap)))
+    
   #+END_SRC
 * TODO Dynamic resizing
   Do it exponentially.
