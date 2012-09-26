@@ -61,9 +61,13 @@
        (()
         (make-max-heap car set-car!))
        ((key key-set!)
-        (make-max-heap key key-set! (vector)))
+        (make-max-heap key key-set! (make-vector (initial-heap-size))))
        ((key key-set! data)
-        (make-heap > -inf key key-set! data (vector-length data)))))
+        ;; It's always 0 here, isn't it, unless we're passing in a valid
+        ;; heap? In which case: use the constructor directly.
+        ;;
+        ;; Should we build the heap automatically?
+        (make-heap > -inf key key-set! data 0))))
     
     (define (figure-6.2)
       (let ((data (list->vector (map list '(16 4 10 14 7 9 3 2 8 1)))))
