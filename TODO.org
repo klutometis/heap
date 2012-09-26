@@ -143,6 +143,12 @@
       (let ((data (list->vector (map list '(16 14 10 8 7 9 3 2 4 1)))))
         (make-max-heap car set-car! data)))
     
+    (let ((heap (figure-6.5)))
+      (heap-change-key! heap 8 15)
+      (test "heap-change-key!"
+            '#((16) (15) (10) (14) (7) (9) (3) (2) (8) (1))
+            (heap-data heap)))
+    
   #+END_SRC
 * TODO Dynamic resizing
   Do it exponentially.
