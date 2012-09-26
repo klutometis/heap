@@ -23,6 +23,7 @@
     
     (define-record-and-printer heap
       >?
+      =?
       inf
       key
       key-set!
@@ -79,7 +80,7 @@
         ;; Should we build the heap automatically?
         (make-max-heap key key-set! data (vector-length data)))
        ((key key-set! data size)
-        (make-heap > -inf key key-set! data length))))
+        (make-heap > = -inf key key-set! data size))))
     
     (define (figure-6.2)
       (let ((data (list->vector (map list '(16 4 10 14 7 9 3 2 8 1)))))
@@ -126,18 +127,21 @@
             '#((14) (8) (10) (4) (7) (9) (3) (2) (1) (1))
             (heap-data heap)))
     
-    (define (heap-change-key! heap i key)
+    (define (heap-change-key! heap i new-key)
       (let ((heap->? (heap->? heap))
+            (heap-=? (heap-=? heap))
             (heap-key (heap-key heap)))
-        (if (heap->? key (heap-key (heap-ref heap i)))
-            (begin
-              ((heap-key-set! heap) (heap-ref heap i) key)
-              (do ((i i (parent i)))
-                  ((or (negative? i)
-                       (heap->? (heap-key (heap-ref heap (parent i)))
-                                (heap-key (heap-ref heap i)))))
-                (heap-swap! heap i (parent i))))
-            (error "Key violates heap-gradient -- HEAP-CHANGE-KEY!"))))
+        (let ((old-key (heap-key (heap-ref heap i))))
+          (if (or (heap->? new-key old-key)
+                  (heap-=? new-key old-key))
+              (begin
+                ((heap-key-set! heap) (heap-ref heap i) new-key)
+                (do ((i i (parent i)))
+                    ((or (negative? i)
+                         (heap->? (heap-key (heap-ref heap (parent i)))
+                                  (heap-key (heap-ref heap i)))))
+                  (heap-swap! heap i (parent i))))
+              (error "Key violates heap-gradient -- HEAP-CHANGE-KEY!")))))
     
     (define (figure-6.5)
       (let ((data (list->vector (map list '(16 14 10 8 7 9 3 2 4 1)))))
@@ -152,7 +156,7 @@
     (define (heap-insert! heap element)
       (let ((heap-size (heap-size heap)))
         (if (= heap-size (heap-length heap))
-            (heap-data-set! (vector-resize (heap-data heap) (* 2 heap-size))))
+            (heap-data-set! heap (vector-resize (heap-data heap) (* 2 heap-size))))
         (heap-size-set! heap (+ heap-size 1))
         ((heap-key-set! heap) element (heap-inf heap))
         (let ((key ((heap-key heap) element)))
@@ -160,7 +164,8 @@
           (heap-change-key! heap heap-size key))))
     
     (let ((heap (figure-6.5)))
-      (heap-insert! heap '(21)))
+      (heap-insert! heap '(21))
+      (debug (heap-data heap)))
     
   #+END_SRC
 * TODO Dynamic resizing
