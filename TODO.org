@@ -29,6 +29,9 @@
       data
       size)
     
+    (define (heap-length heap)
+      (vector-length (heap-data heap)))
+    
     (define (heap-ref heap i)
       (vector-ref (heap-data heap) i))
     
