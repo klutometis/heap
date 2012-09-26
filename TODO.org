@@ -22,7 +22,7 @@
       (+ (* 2 i) 1 1))
     
     (define-record-and-printer heap
-      >
+      >?
       inf
       key
       key-set!
@@ -39,18 +39,18 @@
       (vector-swap! (heap-data heap) i j))
     
     (define (heapify! heap i)
-      (let ((heap-> (heap-> heap))
+      (let ((heap->? (heap->? heap))
             (heap-key (heap-key heap)))
         (let ((left (left i))
               (right (right i)))
           (let* ((extremum (if (and (< left (heap-size heap))
-                                    (heap->
+                                    (heap->?
                                      (heap-key (heap-ref heap left))
                                      (heap-key (heap-ref heap i))))
                                left
                                i))
                  (extremum (if (and (< right (heap-size heap))
-                                    (heap->
+                                    (heap->?
                                      (heap-key (heap-ref heap right))
                                      (heap-key (heap-ref heap extremum))))
                                right
