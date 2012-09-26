@@ -64,6 +64,10 @@
        ((key key-set! data)
         (make-heap > -inf key key-set! data (vector-length data)))))
     
+    (define (figure-6.2)
+      (let ((data (list->vector (map list '(16 4 10 14 7 9 3 2 8 1)))))
+        (make-max-heap car set-car! data)))
+    
             (vector-map (lambda (i e) ((heap-key heap) e)) (heap-data heap))))
     
   #+END_SRC
