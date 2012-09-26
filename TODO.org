@@ -93,6 +93,10 @@
     (let ((heap (figure-6.2)))
       (build-heap! heap)
       (test-figure-6.2 "build-heap!" heap))
+    
+    (define (heap-extremum heap)
+      (heap-ref heap 0))
+    
   #+END_SRC
 * TODO Dynamic resizing
   Do it exponentially.
