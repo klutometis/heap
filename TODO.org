@@ -4,4 +4,5 @@
 * TODO Use vectors instead of lists.
 * TODO Dynamic resizing
   Do it exponentially.
-* TODO Payload mechanism
+* DONE Payload mechanism
+  CLOSED: [2012-09-26 Wed 01:33]
