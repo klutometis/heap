@@ -54,6 +54,8 @@
     
     (define-record-and-printer element key datum)
     
+    (define initial-heap-size (make-parameter 100))
+    
     (define make-max-heap
       (case-lambda
        (()
