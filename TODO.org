@@ -87,7 +87,7 @@
     
     (define (test-figure-6.2 testandum heap)
       (test testandum
-            '#((16) (4) (10) (14) (7) (9) (3) (2) (8) (1))
+            '#((16) (14) (10) (8) (7) (9) (3) (2) (4) (1))
             (heap-data heap)))
     
     (let ((heap (figure-6.2)))
