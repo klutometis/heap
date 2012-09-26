@@ -2,6 +2,62 @@
   Why aren't there SRFIs about the fundamental datatypes: queues,
   stacks, heaps?
 * TODO Use vectors instead of lists.
+  #+BEGIN_SRC scheme
+    (use debug test vector-lib (only aima define-record-and-printer))
+    
+    (define (parent i)
+      (- (inexact->exact (floor (/ (+ i 1) 2))) 1))
+    
+    (define (left i)
+      (+ (* 2 i) 1))
+    
+    (define (right i)
+      (+ (* 2 i) 1 1))
+    
+    (define-record-and-printer heap
+      >
+      inf
+      key
+      key-set!
+      data
+      size)
+    
+    (define (heap-ref heap i)
+      (vector-ref (heap-data heap) i))
+    
+    (define (heap-swap! heap i j)
+      (vector-swap! (heap-data heap) i j))
+    
+    (define (heapify! heap i)
+      (let ((heap-> (heap-> heap))
+            (heap-key (heap-key heap)))
+        (let ((left (left i))
+              (right (right i)))
+          (let* ((extremum (if (and (< left (heap-size heap))
+                                    (heap->
+                                     (heap-key (heap-ref heap left))
+                                     (heap-key (heap-ref heap i))))
+                               left
+                               i))
+                 (extremum (if (and (< right (heap-size heap))
+                                    (heap->
+                                     (heap-key (heap-ref heap right))
+                                     (heap-key (heap-ref heap extremum))))
+                               right
+                               extremum)))
+            (if (not (= extremum i))
+                (begin (heap-swap! heap i extremum)
+                       (heapify! heap extremum)))))))
+    
+    (define-record-and-printer element key datum)
+    
+    (let* ((figure-6.2 (list->vector (map list '(16 4 10 14 7 9 3 2 8 1))))
+           (heap (make-heap > +inf car set-car! figure-6.2 (vector-length figure-6.2))))
+      (heapify! heap 1)
+      (test '#(16 14 10 8 7 9 3 2 4 1)
+            (vector-map (lambda (i e) ((heap-key heap) e)) (heap-data heap))))
+    
+  #+END_SRC
 * TODO Dynamic resizing
   Do it exponentially.
 * DONE Payload mechanism
