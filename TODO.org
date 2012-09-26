@@ -149,6 +149,19 @@
             '#((16) (15) (10) (14) (7) (9) (3) (2) (8) (1))
             (heap-data heap)))
     
+    (define (heap-insert! heap element)
+      (let ((heap-size (heap-size heap)))
+        (if (= heap-size (heap-length heap))
+            (heap-data-set! (vector-resize (heap-data heap) (* 2 heap-size))))
+        (heap-size-set! heap (+ heap-size 1))
+        ((heap-key-set! heap) element (heap-inf heap))
+        (let ((key ((heap-key heap) element)))
+          (heap-set! heap heap-size element)
+          (heap-change-key! heap heap-size key))))
+    
+    (let ((heap (figure-6.5)))
+      (heap-insert! heap '(21)))
+    
   #+END_SRC
 * TODO Dynamic resizing
   Do it exponentially.
