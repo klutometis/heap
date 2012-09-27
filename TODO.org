@@ -137,10 +137,11 @@
               (begin
                 ((heap-key-set! heap) (heap-ref heap i) new-key)
                 (do ((i i (parent i)))
-                    ((or (negative? i)
+                    ;; Do we also need to check for (negative? i)?
+                    ((or (zero? i)
                          (heap->? (heap-key (heap-ref heap (parent i)))
                                   (heap-key (heap-ref heap i)))))
-                  (heap-swap! heap i (parent i))))
+                (heap-swap! heap i (parent i))))
               (error "Key violates heap-gradient -- HEAP-CHANGE-KEY!")))))
     
     (define (figure-6.5)
@@ -158,8 +159,8 @@
         (if (= heap-size (heap-length heap))
             (heap-data-set! heap (vector-resize (heap-data heap) (* 2 heap-size))))
         (heap-size-set! heap (+ heap-size 1))
-        ((heap-key-set! heap) element (heap-inf heap))
         (let ((key ((heap-key heap) element)))
+          ((heap-key-set! heap) element (heap-inf heap))
           (heap-set! heap heap-size element)
           (heap-change-key! heap heap-size key))))
     
