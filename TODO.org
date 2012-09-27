@@ -1,3 +1,5 @@
+* TODO What about cases with identical data but different priority?
+  Should we hash on datum and priority?
 * TODO Don't expose the =.../index= functions.
   We only really care about data, don't we? =.../index= is
   implementation.
