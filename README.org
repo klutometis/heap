@@ -1,2 +1,3 @@
 * Heap
-A straight-forward heap implementation in Chicken Scheme
+  A mutable heap in Chicken Scheme with priority-queue operations and
+  $O(1)$ membership-testing

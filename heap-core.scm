@@ -1,17 +1,8 @@
 @(title "Heap")
 @(description "Mutable heap with priority-queue functions and O(1) membership-testing, which is useful for implementing e.g. A*")
 @(author "Peter Danenberg")
-@(email "pcd@roxygen.org")
 @(username "klutometis")
-
-(define (parent i)
-  (- (inexact->exact (floor (/ (+ i 1) 2))) 1))
-
-(define (left i)
-  (+ (* 2 i) 1))
-
-(define (right i)
-  (+ (* 2 i) 1 1))
+@(email "pcd@roxygen.org")
 
 (define-record-and-printer heap
   @("The heap data-structure"
@@ -30,6 +21,15 @@
   key-set!
   data
   size)
+
+(define (parent i)
+  (- (inexact->exact (floor (/ (+ i 1) 2))) 1))
+
+(define (left i)
+  (+ (* 2 i) 1))
+
+(define (right i)
+  (+ (* 2 i) 1 1))
 
 (define (heap-empty? heap)
   @("Is the heap empty?"
