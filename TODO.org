@@ -189,6 +189,8 @@
                #f)
             (heap-data heap)))
     
+    (define (heap-delete! heap i)
+      )
   #+END_SRC
 * TODO Dynamic resizing
   Do it exponentially.
