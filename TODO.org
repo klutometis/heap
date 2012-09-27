@@ -166,7 +166,28 @@
     
     (let ((heap (figure-6.5)))
       (heap-insert! heap '(21))
-      (debug (heap-data heap)))
+      (test "heap-insert!"
+            '#((21)
+               (16)
+               (10)
+               (8)
+               (14)
+               (9)
+               (3)
+               (2)
+               (4)
+               (1)
+               (7)
+               #f
+               #f
+               #f
+               #f
+               #f
+               #f
+               #f
+               #f
+               #f)
+            (heap-data heap)))
     
   #+END_SRC
 * TODO Dynamic resizing
