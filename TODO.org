@@ -190,7 +190,20 @@
             (heap-data heap)))
     
     (define (heap-delete! heap i)
-      )
+      ;; Hypothesis
+      (let ((heap-size (- (heap-size heap) 1)))
+        (if (negative? heap-size)
+            (error "Heap underflow -- HEAP-DELETE!")
+            (begin
+              (heap-size-set! heap heap-size)
+              (heap-set! heap i (heap-ref heap heap-size))
+              (heapify! heap i)))))
+    
+    (let ((heap (figure-6.5)))
+      (heap-delete! heap 4)
+      (test "heap-delete!"
+            '#((16) (14) (10) (8) (1) (9) (3) (2) (4) (1))
+            (heap-data heap)))
   #+END_SRC
 * TODO Dynamic resizing
   Do it exponentially.
