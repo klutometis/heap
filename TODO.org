@@ -1,3 +1,6 @@
+* TODO Don't expose the =.../index= functions.
+  We only really care about data, don't we? =.../index= is
+  implementation.
 * TODO Use =max= instead of =extremum=?
   I.e., with the understanding that it's inverted in a min-heap.
 * TODO Membership testing with an adherent hash-table?
