@@ -2,6 +2,9 @@
  (author "Peter Danenberg")
  (category data)
  (license "BSD")
- (depends)
+ (depends aima
+          cock
+          miscmacros
+          vector-lib)
  (test-depends)
  (foreign-depends))
