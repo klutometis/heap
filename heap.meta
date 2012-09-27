@@ -1,4 +1,4 @@
-((synopsis "A straight-forward heap with destructive operations")
+((synopsis "Mutable heap with priority-queue operations and O(1) membership-testing")
  (author "Peter Danenberg")
  (category data)
  (license "BSD")

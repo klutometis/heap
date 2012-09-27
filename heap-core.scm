@@ -1,3 +1,9 @@
+@(title "Heap")
+@(description "Mutable heap with priority-queue functions and O(1) membership-testing, which is useful for implementing e.g. A*")
+@(author "Peter Danenberg")
+@(email "pcd@roxygen.org")
+@(username "klutometis")
+
 (define (parent i)
   (- (inexact->exact (floor (/ (+ i 1) 2))) 1))
 
