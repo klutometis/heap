@@ -1,13 +1,10 @@
 * TODO Don't expose the =.../index= functions.
   We only really care about data, don't we? =.../index= is
   implementation.
-* TODO Use =max= instead of =extremum=?
-  I.e., with the understanding that it's inverted in a min-heap.
-* TODO Membership testing with an adherent hash-table?
-* TODO SRFI
-  Why aren't there SRFIs about the fundamental datatypes: queues,
-  stacks, heaps?
-* TODO Use vectors instead of lists.
+* DONE Membership testing with an adherent hash-table?
+  CLOSED: [2012-09-27 Thu 05:31]
+* DONE Use vectors instead of lists.
+  CLOSED: [2012-09-27 Thu 05:31]
   #+BEGIN_SRC scheme
     (use (only aima define-record-and-printer)
          debug
@@ -208,7 +205,17 @@
             '#((16) (14) (10) (8) (1) (9) (3) (2) (4) (1))
             (heap-data heap)))
   #+END_SRC
-* TODO Dynamic resizing
+* DONE Dynamic resizing
+  CLOSED: [2012-09-27 Thu 05:31]
   Do it exponentially.
 * DONE Payload mechanism
   CLOSED: [2012-09-26 Wed 01:33]
+* CANCELED Use =max= instead of =extremum=?
+  CLOSED: [2012-09-27 Thu 05:31]
+  I.e., with the understanding that it's inverted in a min-heap.
+* CANCELED SRFI
+  CLOSED: [2012-09-27 Thu 05:31]
+  - CLOSING NOTE [2012-09-27 Thu 05:31] \\
+    Good question.
+  Why aren't there SRFIs about the fundamental datatypes: queues,
+  stacks, heaps?
