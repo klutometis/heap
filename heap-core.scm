@@ -11,16 +11,20 @@
     (inf "Infinity w.r.t. the inequality `>?'")
     (key "Key-accessor for heap-elements")
     (key-set! "Key-mutator for heap-elements")
+    (datum "Datum-accessor for heap-elements")
     (data "Vector data-store underlying heap")
     (size "Size of the heap as distinct from size of data")
+    (membership "Mapping from data to indices")
     (@to "heap"))
   >?
   =?
   inf
   key
   key-set!
+  datum
   data
-  size)
+  size
+  membership)
 
 (define (parent i)
   (- (inexact->exact (floor (/ (+ i 1) 2))) 1))
@@ -44,12 +48,38 @@
   (vector-ref (heap-data heap) i))
 
 (define (heap-set! heap i x)
-  (vector-set! (heap-data heap) i x))
+  (vector-set! (heap-data heap) i x)
+  (hash-table-set!
+   (heap-membership heap)
+   ((heap-datum heap) x)
+   i))
 
 (define (heap-swap! heap i j)
-  (vector-swap! (heap-data heap) i j))
+  (vector-swap! (heap-data heap) i j)
+  (hash-table-set!
+   (heap-membership heap)
+   ((heap-datum heap) (heap-ref heap i))
+   i)
+  (hash-table-set!
+   (heap-membership heap)
+   ((heap-datum heap) (heap-ref heap j))
+   j))
 
-(define (heapify! heap i)
+(define (heap-index heap datum)
+  @("For a given datum, determine its index in the heap; or return #f"
+    (heap "The heap in which to check")
+    (datum "The datum to check for")
+    (@to "integer or #f"))
+  (hash-table-ref/default (heap-membership heap) datum #f))
+
+(define (heap-member? heap datum)
+  @("Is this datum a member in the heap?"
+    (heap "The heap in which to check")
+    (datum "The datum to check for")
+    (@to "boolean"))
+  (and (heap-index heap datum) #t))
+
+(define (heapify!/index heap i)
   @("Given a heap-index, reëstablish the heap-property."
     (heap "The heap in which to heapify")
     (i "The element-index to heapify"))
@@ -71,7 +101,16 @@
                            extremum)))
         (if (not (= extremum i))
             (begin (heap-swap! heap i extremum)
-                   (heapify! heap extremum)))))))
+                   (heapify!/index heap extremum)))))))
+
+(define (heapify! heap datum)
+  @("Given a heap-index, reëstablish the heap-property."
+    (heap "The heap in which to heapify")
+    (datum "The datum whose element to heapify"))
+  (let ((i (heap-index heap datum)))
+    (if i
+        (heapify! heap i)
+        (error "Datum not found -- HEAPIFY!"))))
 
 (define initial-heap-size
   @("Initial size of the heap data-store; exponentially resized on
@@ -82,43 +121,45 @@ overflow.")
   @("Make a max-heap."
     (key "Key-accessor for heap-elements")
     (key-set! "Key-mutator for heap-elements")
+    (datum "Datum-accessor for heap-elements")
     (data "Vector data-store underlying heap")
     (size "Size of the heap as distinct from size of data")
     (@to "max-heap"))
   (case-lambda
    (()
-    (make-max-heap car set-car!))
-   ((key key-set!)
-    (make-max-heap key key-set! (make-vector (initial-heap-size)) 0))
-   ((key key-set! data)
+    (make-max-heap car set-car! cdr))
+   ((key key-set! datum)
+    (make-max-heap key key-set! datum (make-vector (initial-heap-size)) 0))
+   ((key key-set! datum data)
     ;; It's always 0 here, isn't it, unless we're passing in a valid
     ;; heap? In which case: use the constructor directly.
     ;;
     ;; Should we build the heap automatically?
-    (make-max-heap key key-set! data (vector-length data)))
-   ((key key-set! data size)
-    (make-heap > = -inf key key-set! data size))))
+    (make-max-heap key key-set! datum data (vector-length data)))
+   ((key key-set! datum data size)
+    (make-heap > = -inf key key-set! datum data size (make-hash-table)))))
 
 (define make-min-heap
   @("Make a min-heap."
     (key "Key-accessor for heap-elements")
     (key-set! "Key-mutator for heap-elements")
+    (datum "Datum-accessor for heap-elements")
     (data "Vector data-store underlying heap")
     (size "Size of the heap as distinct from size of data")
     (@to "min-heap"))
   (case-lambda
    (()
-    (make-max-heap car set-car!))
-   ((key key-set!)
-    (make-max-heap key key-set! (make-vector (initial-heap-size)) 0))
-   ((key key-set! data)
+    (make-max-heap car set-car! cdr))
+   ((key key-set! datum)
+    (make-max-heap key key-set! datum (make-vector (initial-heap-size)) 0))
+   ((key key-set! datum data)
     ;; It's always 0 here, isn't it, unless we're passing in a valid
     ;; heap? In which case: use the constructor directly.
     ;;
     ;; Should we build the heap automatically?
-    (make-max-heap key key-set! data (vector-length data)))
-   ((key key-set! data size)
-    (make-heap < = +inf key key-set! data size))))
+    (make-max-heap key key-set! datum data (vector-length data)))
+   ((key key-set! datum data size)
+    (make-heap < = +inf key key-set! datum data size (make-hash-table)))))
 
 (define (build-heap! heap)
   @("Heapify the entire data-store."
@@ -128,7 +169,7 @@ overflow.")
     ;; Should be i - 1 here?
     (do ((i (sub1 median) (sub1 i)))
         ((negative? i))
-      (heapify! heap i))))
+      (heapify!/index heap i))))
 
 (define (heap-extremum heap)
   @("Peak at the heap's extremum (min or max)."
@@ -145,10 +186,10 @@ overflow.")
       (let ((extremum (heap-extremum heap)))
         (heap-set! heap 0 (heap-ref heap (- (heap-size heap) 1)))
         (heap-size-set! heap (- (heap-size heap) 1))
-        (heapify! heap 0)
+        (heapify!/index heap 0)
         extremum)))
 
-(define (heap-change-key! heap i new-key)
+(define (heap-change-key!/index heap i new-key)
   @("Change the key of the ith element to new-key along the
 heap-gradient."
     (heap "The heap in which to change")
@@ -170,6 +211,16 @@ heap-gradient."
             (heap-swap! heap i (parent i))))
           (error "Key violates heap-gradient -- HEAP-CHANGE-KEY!")))))
 
+(define (heap-change-key! heap datum new-key)
+  @("Change the key of the element with datum to new-key along the
+heap-gradient."
+    (heap "The heap in which to change")
+    (datum "The datum whose key to change")
+    (new-key "The new key to assign to element with datum"))  (let ((i (heap-index heap datum)))
+    (if i
+        (heap-change-key!/index heap i new-key)
+        (error "Datum not found -- HEAP-CHANGE-KEY!"))))
+
 (define (heap-insert! heap element)
   @("Insert a new element into the heap."
     (heap "The heap in which to insert")
@@ -183,10 +234,9 @@ heap-gradient."
     (let ((key ((heap-key heap) element)))
       ((heap-key-set! heap) element (heap-inf heap))
       (heap-set! heap heap-size element)
-      (heap-change-key! heap heap-size key))))
+      (heap-change-key!/index heap heap-size key))))
 
-
-(define (heap-delete! heap i)
+(define (heap-delete!/index heap i)
   @("Delete the ith element from the heap"
     (heap "The heap from which to delete")
     (i "The index of the element to delete"))
@@ -194,7 +244,17 @@ heap-gradient."
   (let ((heap-size (- (heap-size heap) 1)))
     (if (negative? heap-size)
         (error "Heap underflow -- HEAP-DELETE!")
-        (begin
+        (let ((datum ((heap-datum heap) (heap-ref heap i))))
+          (hash-table-delete! (heap-membership heap) datum)
           (heap-size-set! heap heap-size)
           (heap-set! heap i (heap-ref heap heap-size))
-          (heapify! heap i)))))
+          (heapify!/index heap i)))))
+
+(define (heap-delete! heap datum)
+  @("Delete the element with datum"
+    (heap "The heap from which to delete")
+    (datum "The datum whose element to delete"))
+  (let ((i (heap-index heap datum)))
+    (if i
+        (heap-delete!/index heap i)
+        (error "Datum not found -- HEAP-DELETE!"))))
