@@ -8,16 +8,23 @@
   @("The heap module provides basic priority queue functions with O(1)
 membership-testing, which is useful for implementing e.g. A*.")
   (build-heap!
+   heap-data
+   initial-heap-size
    make-heap
-   heap-adjust-key!
+   make-max-heap
+   make-min-heap
+   heap-change-key!
+   heap-delete!
    heap-empty?
    heap-extract-extremum!
    heap-extremum
    heap-insert!
-   heap-length
-   heap-union!
    heapify!)
 
   (import chicken scheme)
+
+  (use (only aima define-record-and-printer)
+       miscmacros
+       vector-lib)
 
   (include "heap-core.scm"))
