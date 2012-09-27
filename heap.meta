@@ -6,5 +6,5 @@
           cock
           miscmacros
           vector-lib)
- (test-depends)
+ (test-depends test)
  (foreign-depends))
