@@ -2,7 +2,7 @@
 
 (setup-shared-extension-module
  'heap
- (extension-version "0.1.3")
+ (extension-version "0.2")
  compile-options: '(-X cock))
 
 (run (cock -o heap.wiki heap-core.scm))
