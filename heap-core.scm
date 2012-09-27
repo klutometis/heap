@@ -8,6 +8,15 @@
   (+ (* 2 i) 1 1))
 
 (define-record-and-printer heap
+  @("The heap data-structure"
+    (>? "Greater-than relation for keys")
+    (=? "Equal-to relation for keys")
+    (inf "Infinity w.r.t. the inequality `>?'")
+    (key "Key-accessor for heap-elements")
+    (key-set! "Key-mutator for heap-elements")
+    (data "Vector data-store underlying heap")
+    (size "Size of the heap as distinct from size of data")
+    (@to "heap"))
   >?
   =?
   inf
@@ -15,6 +24,12 @@
   key-set!
   data
   size)
+
+(define (heap-empty? heap)
+  @("Is the heap empty?"
+    (heap "The heap to check")
+    (@to "boolean"))
+  (zero? (heap-size heap)))
 
 (define (heap-length heap)
   (vector-length (heap-data heap)))
@@ -29,6 +44,9 @@
   (vector-swap! (heap-data heap) i j))
 
 (define (heapify! heap i)
+  @("Given a heap-index, reëstablish the heap-property."
+    (heap "The heap in which to heapify")
+    (i "The element-index to heapify"))
   (let ((heap->? (heap->? heap))
         (heap-key (heap-key heap)))
     (let ((left (left i))
@@ -49,9 +67,18 @@
             (begin (heap-swap! heap i extremum)
                    (heapify! heap extremum)))))))
 
-(define initial-heap-size (make-parameter 100))
+(define initial-heap-size
+  @("Initial size of the heap data-store; exponentially resized on
+overflow.")
+  (make-parameter 100))
 
 (define make-max-heap
+  @("Make a max-heap."
+    (key "Key-accessor for heap-elements")
+    (key-set! "Key-mutator for heap-elements")
+    (data "Vector data-store underlying heap")
+    (size "Size of the heap as distinct from size of data")
+    (@to "max-heap"))
   (case-lambda
    (()
     (make-max-heap car set-car!))
@@ -67,6 +94,12 @@
     (make-heap > = -inf key key-set! data size))))
 
 (define make-min-heap
+  @("Make a min-heap."
+    (key "Key-accessor for heap-elements")
+    (key-set! "Key-mutator for heap-elements")
+    (data "Vector data-store underlying heap")
+    (size "Size of the heap as distinct from size of data")
+    (@to "min-heap"))
   (case-lambda
    (()
     (make-max-heap car set-car!))
@@ -82,6 +115,8 @@
     (make-heap < = +inf key key-set! data size))))
 
 (define (build-heap! heap)
+  @("Heapify the entire data-store."
+    (heap "The heap to heapify"))
   (heap-size-set! heap (vector-length (heap-data heap)))
   (let ((median (inexact->exact (floor (/ (heap-size heap) 2)))))
     ;; Should be i - 1 here?
@@ -90,9 +125,15 @@
       (heapify! heap i))))
 
 (define (heap-extremum heap)
+  @("Peak at the heap's extremum (min or max)."
+    (heap "The heap at which to peek")
+    (@to "extreme element"))
   (heap-ref heap 0))
 
 (define (heap-extract-extremum! heap)
+  @("Return and delete the heap's extremum (min or max)."
+    (heap "The heap from which to extract")
+    (@to "extreme element"))
   (if (zero? (heap-size heap))
       (error "Heap underflow -- HEAP-EXTRACT-EXTREMUM!")
       (let ((extremum (heap-extremum heap)))
@@ -102,6 +143,11 @@
         extremum)))
 
 (define (heap-change-key! heap i new-key)
+  @("Change the key of the ith element to new-key along the
+heap-gradient."
+    (heap "The heap in which to change")
+    (i "The index of the element whose key to change")
+    (new-key "The new key to assign to element i"))
   (let ((heap->? (heap->? heap))
         (heap-=? (heap-=? heap))
         (heap-key (heap-key heap)))
@@ -119,6 +165,9 @@
           (error "Key violates heap-gradient -- HEAP-CHANGE-KEY!")))))
 
 (define (heap-insert! heap element)
+  @("Insert a new element into the heap."
+    (heap "The heap in which to insert")
+    (element "The element to be inserted"))
   (let ((heap-size (heap-size heap)))
     (if (= heap-size (heap-length heap))
         ;; Exponential resizing-strategy
@@ -132,6 +181,9 @@
 
 
 (define (heap-delete! heap i)
+  @("Delete the ith element from the heap"
+    (heap "The heap from which to delete")
+    (i "The index of the element to delete"))
   ;; Hypothesis
   (let ((heap-size (- (heap-size heap) 1)))
     (if (negative? heap-size)
