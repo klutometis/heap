@@ -1,131 +1,142 @@
 (define (parent i)
-  (- (exact-floor (/ (+ i 1) 2)) 1))
+  (- (inexact->exact (floor (/ (+ i 1) 2))) 1))
 
 (define (left i)
-  (+ (* i 2) 1))
+  (+ (* 2 i) 1))
 
 (define (right i)
-  (+ (* i 2) 1 1))
+  (+ (* 2 i) 1 1))
 
-(define-record-type :heap
-  (make-heap key set-key! more? extremum size data)
-  heap?
-  (key heap-key)
-  (set-key! heap-set-key!)
-  (more? heap-more?)
-  (extremum heap-range-extremum)
-  (size heap-size set-heap-size!)
-  (data heap-data set-heap-data!))
+(define-record-and-printer heap
+  >?
+  =?
+  inf
+  key
+  key-set!
+  data
+  size)
 
 (define (heap-length heap)
-  (length (heap-data heap)))
-
-(define (heap-index heap urelt)
-  (list-index (lambda (elt) (eq? urelt elt)) (heap-data heap)))
-
-(define (heap-swap! heap i j)
-  (swap! (heap-data heap) i j))
+  (vector-length (heap-data heap)))
 
 (define (heap-ref heap i)
-  (list-ref (heap-data heap) i))
+  (vector-ref (heap-data heap) i))
 
-(define (heap-set! heap i k)
-  (list-set! (heap-data heap) i k))
+(define (heap-set! heap i x)
+  (vector-set! (heap-data heap) i x))
 
-(define (heap-empty? heap)
-  (zero? (heap-size heap)))
+(define (heap-swap! heap i j)
+  (vector-swap! (heap-data heap) i j))
 
 (define (heapify! heap i)
-  (let ((l (left i))
-        (r (right i))
-        (key (heap-key heap))
-        (size (heap-size heap))
-        (more? (heap-more? heap)))
-    (let ((l-valid? (< l size))
-          (r-valid? (< r size)))
-      (let ((key-l (if l-valid? (key (heap-ref heap l))))
-            (key-r (if r-valid? (key (heap-ref heap r))))
-            (key-i (key (heap-ref heap i))))
-        (let ((extreme
-               (let* ((extreme-l
-                       (if (and l-valid?
-                                (more? key-l key-i))
-                           l
+  (let ((heap->? (heap->? heap))
+        (heap-key (heap-key heap)))
+    (let ((left (left i))
+          (right (right i)))
+      (let* ((extremum (if (and (< left (heap-size heap))
+                                (heap->?
+                                 (heap-key (heap-ref heap left))
+                                 (heap-key (heap-ref heap i))))
+                           left
                            i))
-                      (key-extreme-l (key (heap-ref heap extreme-l))))
-                 (if (and r-valid?
-                          (more? key-r key-extreme-l))
-                     r
-                     extreme-l))))
-          (if (not (= extreme i))
-              (begin
-                (heap-swap! heap i extreme)
-                (heapify! heap extreme))))))))
+             (extremum (if (and (< right (heap-size heap))
+                                (heap->?
+                                 (heap-key (heap-ref heap right))
+                                 (heap-key (heap-ref heap extremum))))
+                           right
+                           extremum)))
+        (if (not (= extremum i))
+            (begin (heap-swap! heap i extremum)
+                   (heapify! heap extremum)))))))
+
+(define initial-heap-size (make-parameter 100))
+
+(define make-max-heap
+  (case-lambda
+   (()
+    (make-max-heap car set-car!))
+   ((key key-set!)
+    (make-max-heap key key-set! (make-vector (initial-heap-size)) 0))
+   ((key key-set! data)
+    ;; It's always 0 here, isn't it, unless we're passing in a valid
+    ;; heap? In which case: use the constructor directly.
+    ;;
+    ;; Should we build the heap automatically?
+    (make-max-heap key key-set! data (vector-length data)))
+   ((key key-set! data size)
+    (make-heap > = -inf key key-set! data size))))
+
+(define make-min-heap
+  (case-lambda
+   (()
+    (make-max-heap car set-car!))
+   ((key key-set!)
+    (make-max-heap key key-set! (make-vector (initial-heap-size)) 0))
+   ((key key-set! data)
+    ;; It's always 0 here, isn't it, unless we're passing in a valid
+    ;; heap? In which case: use the constructor directly.
+    ;;
+    ;; Should we build the heap automatically?
+    (make-max-heap key key-set! data (vector-length data)))
+   ((key key-set! data size)
+    (make-heap < = +inf key key-set! data size))))
 
 (define (build-heap! heap)
-  (set-heap-size! heap (heap-length heap))
-  (let ((median (exact-floor (/ (heap-size heap) 2))))
-    (loop ((for i (down-from median (to 0))))
-          (heapify! heap i))))
-
-(define (heap-extract-extremum! heap)
-  (let ((size (heap-size heap)))
-    (if (< size 1)
-        (error "heap underflow -- EXTRACT-EXTREMUM"))
-    (let ((extremum (car (heap-data heap))))
-      (heap-set! heap 0 (heap-ref heap (- size 1)))
-      (set-heap-size! heap (- size 1))
-      (heapify! heap 0)
-      extremum)))
+  (heap-size-set! heap (vector-length (heap-data heap)))
+  (let ((median (inexact->exact (floor (/ (heap-size heap) 2)))))
+    ;; Should be i - 1 here?
+    (do ((i (sub1 median) (sub1 i)))
+        ((negative? i))
+      (heapify! heap i))))
 
 (define (heap-extremum heap)
-  (let ((size (heap-size heap)))
-    (if (< size 1)
-        (error "heap underflow -- EXTREMUM"))
-    (car (heap-data heap))))
+  (heap-ref heap 0))
 
-(define (heap-adjust-key! heap i k)
-  (let ((key (heap-key heap))
-        (set-key! (heap-set-key! heap)))
-    (let* ((i-ref (heap-ref heap i))
-           (i-key (key i-ref)))
-      (if ((heap-more? heap) i-key k)
-          (error "new key violates heap gradient -- ADJUST-KEY!" `(,i-key -> ,k)))
-      (set-key! i-ref k)
-      (loop continue ((with i i)
-                      (with parent-i (parent i))
-                      (while (> i 0))
-                      (while ((heap-more? heap)
-                              (key (heap-ref heap i))
-                              (key (heap-ref heap parent-i)))))
-            (heap-swap! heap i parent-i)
-            (continue (=> i parent-i)
-                      (=> parent-i (parent parent-i)))))))
+(define (heap-extract-extremum! heap)
+  (if (zero? (heap-size heap))
+      (error "Heap underflow -- HEAP-EXTRACT-EXTREMUM!")
+      (let ((extremum (heap-extremum heap)))
+        (heap-set! heap 0 (heap-ref heap (- (heap-size heap) 1)))
+        (heap-size-set! heap (- (heap-size heap) 1))
+        (heapify! heap 0)
+        extremum)))
 
-(define (heap-adjust-key!/elt heap elt k)
-  (let ((i (heap-index heap elt)))
-    (if i
-        (heap-adjust-key! heap i k)
-        (error "No such elt -- HEAP-ADJUST-KEY!/ELT" elt))))
+(define (heap-change-key! heap i new-key)
+  (let ((heap->? (heap->? heap))
+        (heap-=? (heap-=? heap))
+        (heap-key (heap-key heap)))
+    (let ((old-key (heap-key (heap-ref heap i))))
+      (if (or (heap->? new-key old-key)
+              (heap-=? new-key old-key))
+          (begin
+            ((heap-key-set! heap) (heap-ref heap i) new-key)
+            (do ((i i (parent i)))
+                ;; Do we also need to check for (negative? i)?
+                ((or (zero? i)
+                     (heap->? (heap-key (heap-ref heap (parent i)))
+                              (heap-key (heap-ref heap i)))))
+            (heap-swap! heap i (parent i))))
+          (error "Key violates heap-gradient -- HEAP-CHANGE-KEY!")))))
 
-(define (heap-insert! heap elt)
-  (let ((new-size (+ (heap-size heap) 1))
-        (key ((heap-key heap) elt)))
-    (set-heap-size! heap new-size)
-    (if (>= (heap-length heap) new-size)
-        (list-set! (heap-data heap) (- new-size 1) elt)
-        (set-heap-data! heap (append (heap-data heap) (list elt))))
-    ((heap-set-key! heap) elt (heap-range-extremum heap))
-    (heap-adjust-key! heap (- new-size 1) key)))
+(define (heap-insert! heap element)
+  (let ((heap-size (heap-size heap)))
+    (if (= heap-size (heap-length heap))
+        ;; Exponential resizing-strategy
+        (heap-data-set! heap (vector-resize (heap-data heap)
+                                            (* 2 heap-size))))
+    (heap-size-set! heap (+ heap-size 1))
+    (let ((key ((heap-key heap) element)))
+      ((heap-key-set! heap) element (heap-inf heap))
+      (heap-set! heap heap-size element)
+      (heap-change-key! heap heap-size key))))
 
-(define (heapsort! heap)
-  (if (heap-empty? heap)
-      '()
-      (cons (heap-extract-extremum! heap) (heapsort! heap))))
 
-(define (heap-union! destination source)
-  (if (heap-empty? source)
-      destination
-      (begin
-        (heap-insert! destination (heap-extract-extremum! source))
-        (heap-union! destination source))))
+(define (heap-delete! heap i)
+  ;; Hypothesis
+  (let ((heap-size (- (heap-size heap) 1)))
+    (if (negative? heap-size)
+        (error "Heap underflow -- HEAP-DELETE!")
+        (begin
+          (heap-size-set! heap heap-size)
+          (heap-set! heap i (heap-ref heap heap-size))
+          (heapify! heap i)))))
