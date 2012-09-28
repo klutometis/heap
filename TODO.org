@@ -1,5 +1,16 @@
 * TODO What about cases with identical data but different priority?
   Should we hash on datum and priority?
+
+  With identical elements, it's possible that the heap and membership
+  table are in an inconsistent state: if you delete one of the
+  elements, the membership table will claim it doesn't exist.
+
+  We're going to have to histogram it, therefore, and store both count
+  and index in the membership table. Deleting from the table
+  altogether on zero (but that's an optimization).
+
+  I have the feeling, too, that we should be doing membership on
+  key×datum.
 * TODO Don't expose the =.../index= functions.
   We only really care about data, don't we? =.../index= is
   implementation.
