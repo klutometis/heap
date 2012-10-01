@@ -79,6 +79,12 @@
     (@to "boolean"))
   (and (heap-index heap datum) #t))
 
+(define (heap-key/datum heap datum)
+  @("Find the key, given the datum."
+    (heap "The heap in which to search")
+    (datum "The datum whose key to find"))
+  ((heap-key heap) (heap-ref heap (heap-index heap datum))))
+
 (define (heapify!/index heap i)
   @("Given a heap-index, reëstablish the heap-property."
     (heap "The heap in which to heapify")

@@ -14,6 +14,7 @@
    heap-extremum
    heap-index
    heap-insert!
+   heap-key/datum
    heap-member?
    heap-membership
    heapify!

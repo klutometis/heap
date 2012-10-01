@@ -73,6 +73,7 @@
   (heap-insert! heap (cons 2 'b))
   (heap-insert! heap (cons 3 'c))
   (test-assert "heap-member?" (heap-member? heap 'a))
+  (test "heap-key/datum" 1 (heap-key/datum heap 'a))
   (heap-delete!/index heap 0)
   (test-assert "not-heap-member? -- index" (not (heap-member? heap 'c)))
   (heap-delete! heap 'b)
