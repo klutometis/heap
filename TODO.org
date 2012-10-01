@@ -1,3 +1,10 @@
+* TODO Maybe we should have called this thing =priority-queue=.
+  I'm thinking of undoing the general heap operations.
+* TODO =heap-extract-extremum!= to =heap-extremum!=?
+* TODO Why not modify =heap-insert!= to take a key and datum?
+  Forget about this composite element-thing with accessors; in that
+  case, I suppose, =heap-extremum= and =heap-extract-extremum!= would
+  return two values: key and datum.
 * DONE What about cases with identical data but different priority?
   CLOSED: [2012-10-01 Mon 01:36]
   - CLOSING NOTE [2012-10-01 Mon 01:36] \\
