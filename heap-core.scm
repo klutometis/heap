@@ -83,7 +83,8 @@
   @("Find the key, given the datum."
     (heap "The heap in which to search")
     (datum "The datum whose key to find"))
-  ((heap-key heap) (heap-ref heap (heap-index heap datum))))
+  (let ((index (heap-index heap datum)))
+    (and index ((heap-key heap) (heap-ref heap (heap-index heap datum))))))
 
 (define (heapify!/index heap i)
   @("Given a heap-index, reëstablish the heap-property."
