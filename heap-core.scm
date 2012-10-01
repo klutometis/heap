@@ -149,15 +149,15 @@ overflow.")
     (@to "min-heap"))
   (case-lambda
    (()
-    (make-max-heap car set-car! cdr))
+    (make-min-heap car set-car! cdr))
    ((key key-set! datum)
-    (make-max-heap key key-set! datum (make-vector (initial-heap-size)) 0))
+    (make-min-heap key key-set! datum (make-vector (initial-heap-size)) 0))
    ((key key-set! datum data)
     ;; It's always 0 here, isn't it, unless we're passing in a valid
     ;; heap? In which case: use the constructor directly.
     ;;
     ;; Should we build the heap automatically?
-    (make-max-heap key key-set! datum data (vector-length data)))
+    (make-min-heap key key-set! datum data (vector-length data)))
    ((key key-set! datum data size)
     (make-heap < = +inf key key-set! datum data size (make-hash-table)))))
 
