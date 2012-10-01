@@ -1,4 +1,8 @@
-* TODO What about cases with identical data but different priority?
+* DONE What about cases with identical data but different priority?
+  CLOSED: [2012-10-01 Mon 01:36]
+  - CLOSING NOTE [2012-10-01 Mon 01:36] \\
+    We're enforcing the unique datum constraint; if you add an element
+    whose datum exists, we adjust the key.
   Should we hash on datum and priority?
 
   With identical elements, it's possible that the heap and membership
