@@ -1,3 +1,6 @@
+* TODO =heap-key/datum=: is this the right model?
+  If we were dealing in e.g. composite key-data or multiple values,
+  would this be necessary?
 * TODO Maybe we should have called this thing =priority-queue=.
   I'm thinking of undoing the general heap operations.
 * TODO =heap-extract-extremum!= to =heap-extremum!=?
