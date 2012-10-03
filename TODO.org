@@ -1,3 +1,5 @@
+* TODO Simplify the API with key + datum and multiple values.
+  Remove the composite with accessor and mutator.
 * TODO In =heap-change-key!=, should the key or datum go first?
 * TODO =heap-key/datum=: is this the right model?
   If we were dealing in e.g. composite key-data or multiple values,
