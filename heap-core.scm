@@ -202,25 +202,22 @@ heap-gradient."
         (heap-change-key!/index heap i new-key)
         (error "Datum not found -- HEAP-CHANGE-KEY!"))))
 
-(define (heap-insert! heap element)
+(define (heap-insert! heap key datum)
   @("Insert a new element into the heap if the datum does not exist;
 otherwise, adjust its key."
     (heap "The heap in which to insert")
     (element "The element to be inserted"))
-  (let ((key ((heap-key heap) element))
-        (datum ((heap-datum heap) element)))
-    (if (heap-member? heap datum)
-        (heap-change-key! heap key datum)
-        (let ((heap-size (heap-size heap)))
-          (if (= heap-size (heap-length heap))
-              ;; Exponential resizing-strategy
-              (heap-data-set! heap (vector-resize (heap-data heap)
-                                                  (* 2 heap-size))))
-          (heap-size-set! heap (+ heap-size 1))
-          (let ((key ((heap-key heap) element)))
-            ((heap-key-set! heap) element (heap-inf heap))
-            (heap-set! heap heap-size element)
-            (heap-change-key!/index heap heap-size key))))))
+  (if (heap-member? heap datum)
+      (heap-change-key! heap datum key)
+      (let ((heap-size (heap-size heap)))
+        (if (= heap-size (heap-length heap))
+            ;; Exponential resizing-strategy
+            (heap-data-set! heap (vector-resize (heap-data heap)
+                                                (* 2 heap-size))))
+        (heap-size-set! heap (+ heap-size 1))
+        (let ((element (make-element (heap-inf heap) datum)))
+          (heap-set! heap heap-size element)
+          (heap-change-key!/index heap heap-size key)))))
 
 (define (heap-delete!/index heap i)
   @("Delete the ith element from the heap"
