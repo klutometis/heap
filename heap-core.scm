@@ -4,10 +4,6 @@
 @(username "klutometis")
 @(email "pcd@roxygen.org")
 
-(define-record-and-printer element
-  key
-  datum)
-
 (define-record-and-printer heap
   @("The heap data-structure"
     (>? "Greater-than relation for keys")
@@ -23,6 +19,10 @@
   data
   size
   membership)
+
+(define-record-and-printer element
+  key
+  datum)
 
 (define (parent i)
   (- (inexact->exact (floor (/ (+ i 1) 2))) 1))
