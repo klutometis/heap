@@ -196,7 +196,8 @@ overflow.")
 heap-gradient."
     (heap "The heap in which to change")
     (datum "The datum whose key to change")
-    (new-key "The new key to assign to element with datum"))  (let ((i (heap-index heap datum)))
+    (new-key "The new key to assign to element with datum"))
+  (let ((i (heap-index heap datum)))
     (if i
         (heap-change-key!/index heap i new-key)
         (error "Datum not found -- HEAP-CHANGE-KEY!"))))
