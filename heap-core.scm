@@ -11,21 +11,15 @@
 (define-record-and-printer heap
   @("The heap data-structure"
     (>? "Greater-than relation for keys")
-    (=? "Equal-to relation for keys")
+    (<? "Less-than relation for keys")
     (inf "Infinity w.r.t. the inequality `>?'")
-    (key "Key-accessor for heap-elements")
-    (key-set! "Key-mutator for heap-elements")
-    (datum "Datum-accessor for heap-elements")
     (data "Vector data-store underlying heap")
     (size "Size of the heap as distinct from size of data")
     (membership "Mapping from data to indices")
     (@to "heap"))
   >?
-  =?
+  <?
   inf
-  key
-  key-set!
-  datum
   data
   size
   membership)
