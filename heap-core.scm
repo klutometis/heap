@@ -121,48 +121,25 @@ overflow.")
 
 (define make-max-heap
   @("Make a max-heap."
-    (key "Key-accessor for heap-elements")
-    (key-set! "Key-mutator for heap-elements")
-    (datum "Datum-accessor for heap-elements")
-    (data "Vector data-store underlying heap")
-    (size "Size of the heap as distinct from size of data")
+    (size "Initial heap-size")
     (@to "max-heap"))
   (case-lambda
    (()
-    (make-max-heap car set-car! cdr))
-   ((key key-set! datum)
-    (make-max-heap key key-set! datum (make-vector (initial-heap-size)) 0))
-   ((key key-set! datum data)
-    ;; It's always 0 here, isn't it, unless we're passing in a valid
-    ;; heap? In which case: use the constructor directly.
-    ;;
-    ;; Should we build the heap automatically?
-    (make-max-heap key key-set! datum data (vector-length data)))
-   ((key key-set! datum data size)
-    (make-heap > = -inf key key-set! datum data size (make-hash-table)))))
+    (make-max-heap (initial-heap-size)))
+   ((initial-heap-size)
+    (make-heap >
+               =
+               -inf
+               (make-vector initial-heap-size)
+               0
+               (make-hash-table)))))
 
 (define make-min-heap
   @("Make a min-heap."
-    (key "Key-accessor for heap-elements")
-    (key-set! "Key-mutator for heap-elements")
-    (datum "Datum-accessor for heap-elements")
-    (data "Vector data-store underlying heap")
-    (size "Size of the heap as distinct from size of data")
+    (size "Initial heap-size")
     (@to "min-heap"))
   (case-lambda
    (()
-    (make-min-heap car set-car! cdr))
-   ((key key-set! datum)
-    (make-min-heap key key-set! datum (make-vector (initial-heap-size)) 0))
-   ((key key-set! datum data)
-    ;; It's always 0 here, isn't it, unless we're passing in a valid
-    ;; heap? In which case: use the constructor directly.
-    ;;
-    ;; Should we build the heap automatically?
-    (make-min-heap key key-set! datum data (vector-length data)))
-   ((key key-set! datum data size)
-    (make-heap < = +inf key key-set! datum data size (make-hash-table)))))
-
 (define (build-heap! heap)
   @("Heapify the entire data-store."
     (heap "The heap to heapify"))
