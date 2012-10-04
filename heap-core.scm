@@ -140,15 +140,24 @@ overflow.")
     (@to "min-heap"))
   (case-lambda
    (()
-(define (build-heap! heap)
-  @("Heapify the entire data-store."
-    (heap "The heap to heapify"))
-  (heap-size-set! heap (vector-length (heap-data heap)))
-  (let ((median (inexact->exact (floor (/ (heap-size heap) 2)))))
-    ;; Should be i - 1 here?
-    (do ((i (sub1 median) (sub1 i)))
-        ((negative? i))
-      (heapify!/index heap i))))
+    (make-min-heap (initial-heap-size)))
+   ((initial-heap-size)
+    (make-heap <
+               =
+               +inf
+               (make-vector initial-heap-size)
+               0
+               (make-hash-table)))))
+
+;; (define (build-heap! heap)
+;;   @("Heapify the entire data-store."
+;;     (heap "The heap to heapify"))
+;;   (heap-size-set! heap (vector-length (heap-data heap)))
+;;   (let ((median (inexact->exact (floor (/ (heap-size heap) 2)))))
+;;     ;; Should be i - 1 here?
+;;     (do ((i (sub1 median) (sub1 i)))
+;;         ((negative? i))
+;;       (heapify!/index heap i))))
 
 (define (heap-extremum heap)
   @("Peak at the heap's extremum (min or max)."
