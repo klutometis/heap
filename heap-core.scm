@@ -162,13 +162,13 @@ overflow.")
 (define (heap-extremum heap)
   @("Peak at the heap's extremum (min or max)."
     (heap "The heap at which to peek")
-    (@to "extreme element"))
-  (heap-ref heap 0))
+    (@to "datum"))
+  (element-datum (heap-ref heap 0)))
 
 (define (heap-extract-extremum! heap)
   @("Return and delete the heap's extremum (min or max)."
     (heap "The heap from which to extract")
-    (@to "extreme element"))
+    (@to "datum"))
   (if (zero? (heap-size heap))
       (error "Heap underflow -- HEAP-EXTRACT-EXTREMUM!")
       (let ((extremum (heap-extremum heap)))
