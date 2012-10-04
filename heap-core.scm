@@ -86,37 +86,33 @@
     (and index (element-key (heap-ref heap index)))))
 
 (define (heapify!/index heap i)
-  @("Given a heap-index, reëstablish the heap-property."
-    (heap "The heap in which to heapify")
-    (i "The element-index to heapify"))
   (let ((heap->? (heap->? heap))
-        (heap-key (heap-key heap)))
-    (let ((left (left i))
-          (right (right i)))
-      (let* ((extremum (if (and (< left (heap-size heap))
-                                (heap->?
-                                 (heap-key (heap-ref heap left))
-                                 (heap-key (heap-ref heap i))))
-                           left
-                           i))
-             (extremum (if (and (< right (heap-size heap))
-                                (heap->?
-                                 (heap-key (heap-ref heap right))
-                                 (heap-key (heap-ref heap extremum))))
-                           right
-                           extremum)))
-        (if (not (= extremum i))
-            (begin (heap-swap! heap i extremum)
-                   (heapify!/index heap extremum)))))))
+        (left (left i))
+        (right (right i)))
+    (let* ((extremum (if (and (< left (heap-size heap))
+                              (heap->?
+                               (element-key (heap-ref heap left))
+                               (element-key (heap-ref heap i))))
+                         left
+                         i))
+           (extremum (if (and (< right (heap-size heap))
+                              (heap->?
+                               (element-key (heap-ref heap right))
+                               (element-key (heap-ref heap extremum))))
+                         right
+                         extremum)))
+      (if (not (= extremum i))
+          (begin (heap-swap! heap i extremum)
+                 (heapify!/index heap extremum))))))
 
-(define (heapify! heap datum)
-  @("Given a heap-index, reëstablish the heap-property."
-    (heap "The heap in which to heapify")
-    (datum "The datum whose element to heapify"))
-  (let ((i (heap-index heap datum)))
-    (if i
-        (heapify! heap i)
-        (error "Datum not found -- HEAPIFY!"))))
+;; (define (heapify! heap datum)
+;;   @("Given a heap-datum, reëstablish the heap-property."
+;;     (heap "The heap in which to heapify")
+;;     (datum "The datum whose element to heapify"))
+;;   (let ((i (heap-index heap datum)))
+;;     (if i
+;;         (heapify! heap i)
+;;         (error "Datum not found -- HEAPIFY!"))))
 
 (define initial-heap-size
   @("Initial size of the heap data-store; exponentially resized on
