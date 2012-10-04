@@ -4,6 +4,10 @@
 @(username "klutometis")
 @(email "pcd@roxygen.org")
 
+(define-record-and-printer element
+  key
+  datum)
+
 (define-record-and-printer heap
   @("The heap data-structure"
     (>? "Greater-than relation for keys")
