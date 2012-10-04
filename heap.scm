@@ -20,6 +20,7 @@
   (import chicken scheme)
 
   (use (only aima define-record-and-printer)
+       debug
        miscmacros
        srfi-69
        vector-lib)
