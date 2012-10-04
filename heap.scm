@@ -1,24 +1,21 @@
 (module heap
-  (build-heap!
-   heap-data
+  (;; build-heap!
+   ;; heap-data
    initial-heap-size
    make-heap
    make-max-heap
    make-min-heap
    heap-change-key!
-   heap-change-key!/index
    heap-delete!
-   heap-delete!/index
    heap-empty?
    heap-extract-extremum!
    heap-extremum
-   heap-index
    heap-insert!
-   heap-key/datum
+   heap-key
    heap-member?
-   heap-membership
-   heapify!
-   heapify!/index)
+   ;; heap-membership
+   ;; heapify!
+   )
 
   (import chicken scheme)
 
