@@ -178,26 +178,18 @@ overflow.")
         extremum)))
 
 (define (heap-change-key!/index heap i new-key)
-  @("Change the key of the ith element to new-key along the
-heap-gradient."
-    (heap "The heap in which to change")
-    (i "The index of the element whose key to change")
-    (new-key "The new key to assign to element i"))
-  (let ((heap->? (heap->? heap))
-        (heap-=? (heap-=? heap))
-        (heap-key (heap-key heap)))
-    (let ((old-key (heap-key (heap-ref heap i))))
-      (if (or (heap->? new-key old-key)
-              (heap-=? new-key old-key))
-          (begin
-            ((heap-key-set! heap) (heap-ref heap i) new-key)
-            (do ((i i (parent i)))
-                ;; Do we also need to check for (negative? i)?
-                ((or (zero? i)
-                     (heap->? (heap-key (heap-ref heap (parent i)))
-                              (heap-key (heap-ref heap i)))))
-            (heap-swap! heap i (parent i))))
-          (error "Key violates heap-gradient -- HEAP-CHANGE-KEY!")))))
+  (let ((old-key (element-key (heap-ref heap i))))
+    (if ((heap-<? heap) new-key old-key)
+        (error "Key violates heap-gradient -- HEAP-CHANGE-KEY!")
+        (begin
+          (element-key-set! (heap-ref heap i) new-key)
+          (do ((i i (parent i)))
+              ;; Do we also need to check for (negative? i)?
+              ((or (zero? i)
+                   ((heap->? heap)
+                    (element-key (heap-ref heap (parent i)))
+                    (element-key (heap-ref heap i)))))
+            (heap-swap! heap i (parent i)))))))
 
 (define (heap-change-key! heap datum new-key)
   @("Change the key of the element with datum to new-key along the
