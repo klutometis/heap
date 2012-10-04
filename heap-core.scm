@@ -220,9 +220,9 @@ otherwise, adjust its key."
           (heap-change-key!/index heap heap-size key)))))
 
 (define (heap-delete!/index heap i)
-  @("Delete the ith element from the heap"
-    (heap "The heap from which to delete")
-    (i "The index of the element to delete"))
+  ;; @("Delete the ith element from the heap"
+  ;;   (heap "The heap from which to delete")
+  ;;   (i "The index of the element to delete"))
   ;; Hypothesis
   (let ((heap-size (- (heap-size heap) 1)))
     (if (negative? heap-size)
