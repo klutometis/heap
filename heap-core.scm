@@ -64,10 +64,11 @@
    j))
 
 (define (heap-index heap datum)
-  @("For a given datum, determine its index in the heap; or return #f"
-    (heap "The heap in which to check")
-    (datum "The datum to check for")
-    (@to "integer or #f"))
+  ;; @("For a given datum, determine its index in the heap; or return
+  ;; #f."
+  ;;     (heap "The heap in which to check")
+  ;;     (datum "The datum to check for")
+  ;;     (@to "integer or #f"))
   (hash-table-ref/default (heap-membership heap) datum #f))
 
 (define (heap-member? heap datum)
