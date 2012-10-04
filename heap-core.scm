@@ -56,11 +56,11 @@
   (vector-swap! (heap-data heap) i j)
   (hash-table-set!
    (heap-membership heap)
-   ((heap-datum heap) (heap-ref heap i))
+   (element-datum (heap-ref heap i))
    i)
   (hash-table-set!
    (heap-membership heap)
-   ((heap-datum heap) (heap-ref heap j))
+   (element-datum (heap-ref heap j))
    j))
 
 (define (heap-index heap datum)
