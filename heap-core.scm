@@ -227,7 +227,7 @@ otherwise, adjust its key."
   (let ((heap-size (- (heap-size heap) 1)))
     (if (negative? heap-size)
         (error "Heap underflow -- HEAP-DELETE!")
-        (let ((datum ((heap-datum heap) (heap-ref heap i))))
+        (let ((datum (element-datum (heap-ref heap i))))
           (hash-table-delete! (heap-membership heap) datum)
           (heap-size-set! heap heap-size)
           (heap-set! heap i (heap-ref heap heap-size))
