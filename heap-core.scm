@@ -45,11 +45,11 @@
 (define (heap-ref heap i)
   (vector-ref (heap-data heap) i))
 
-(define (heap-set! heap i x)
-  (vector-set! (heap-data heap) i x)
+(define (heap-set! heap i element)
+  (vector-set! (heap-data heap) i element)
   (hash-table-set!
    (heap-membership heap)
-   ((heap-datum heap) x)
+   (element-datum element)
    i))
 
 (define (heap-swap! heap i j)
