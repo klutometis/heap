@@ -4,6 +4,7 @@
  (license "BSD")
  (depends aima
           cock
+          debug
           miscmacros
           vector-lib)
  (test-depends test)
