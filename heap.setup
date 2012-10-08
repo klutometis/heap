@@ -5,4 +5,5 @@
  (extension-version "0.4.1")
  compile-options: '(-X cock))
 
-(run (cock -o heap.wiki heap-core.scm))
+(run (cock -o heap.wiki heap-core.scm "||"
+           echo cock-utils not "installed:" not creating documentation))
