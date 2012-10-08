@@ -202,6 +202,9 @@ heap-gradient."
         (heap-change-key!/index heap i new-key)
         (error "Datum not found -- HEAP-CHANGE-KEY!"))))
 
+;;; That's surely a bug, isn't it? Why not just insert and error out
+;;; if the datum exists. On the other hand, it resembles hash-table
+;;; behaviour.
 (define (heap-insert! heap key datum)
   @("Insert a new element into the heap if the datum does not exist;
 otherwise, adjust its key."
