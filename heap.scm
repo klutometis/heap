@@ -13,6 +13,7 @@
    heap-insert!
    heap-key
    heap-member?
+   heap-size
    ;; heap-membership
    ;; heapify!
    )
