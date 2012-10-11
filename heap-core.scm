@@ -129,7 +129,7 @@ overflow.")
    ((initial-heap-size)
     (make-heap >
                =
-               -inf
+               -inf.0
                (make-vector initial-heap-size)
                0
                (make-hash-table)))))
@@ -144,7 +144,7 @@ overflow.")
    ((initial-heap-size)
     (make-heap <
                =
-               +inf
+               +inf.0
                (make-vector initial-heap-size)
                0
                (make-hash-table)))))
