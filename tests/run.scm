@@ -64,3 +64,5 @@
   (test "heap-key -- doesn't exist" #f (heap-key heap 'd))
   (heap-delete! heap 'c)
   (test-assert "not-heap-member?" (not (heap-member? heap 'c))))
+
+(test-exit)
