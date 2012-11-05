@@ -64,11 +64,12 @@
    j))
 
 (define (heap-index heap datum)
-  ;; @("For a given datum, determine its index in the heap; or return
-  ;; #f."
-  ;;     (heap "The heap in which to check")
-  ;;     (datum "The datum to check for")
-  ;;     (@to "integer or #f"))
+  @("For a given datum, determine its index in the heap; or return
+#f."
+      (heap "The heap in which to check")
+      (datum "The datum to check for")
+      (@to "integer or #f")
+      (@internal))
   (hash-table-ref/default (heap-membership heap) datum #f))
 
 (define (heap-member? heap datum)
@@ -223,18 +224,28 @@ otherwise, adjust its key."
           (heap-change-key!/index heap heap-size key)))))
 
 (define (heap-delete!/index heap i)
-  ;; @("Delete the ith element from the heap"
-  ;;   (heap "The heap from which to delete")
-  ;;   (i "The index of the element to delete"))
+  @("Delete the ith element from the heap"
+    (heap "The heap from which to delete")
+    (i "The index of the element to delete")
+    (@internal))
   ;; Hypothesis
   (let ((heap-size (- (heap-size heap) 1)))
     (if (negative? heap-size)
         (error "Heap underflow -- HEAP-DELETE!")
         (let ((datum (element-datum (heap-ref heap i))))
+          (debug (##sys#slot datum 0)
+                 (##sys#slot datum 1)
+                 (##sys#slot datum 2)
+                 (##sys#slot datum 3))
+          (debug (heap-member? heap datum))
           (hash-table-delete! (heap-membership heap) datum)
+          (debug (heap-member? heap datum))
           (heap-size-set! heap heap-size)
+          (debug (heap-member? heap datum))
           (heap-set! heap i (heap-ref heap heap-size))
-          (heapify!/index heap i)))))
+          (debug (heap-member? heap datum))
+          (heapify!/index heap i)
+          (debug (heap-member? heap datum))))))
 
 (define (heap-delete! heap datum)
   @("Delete the element with datum"
