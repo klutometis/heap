@@ -2,9 +2,9 @@
  (author "Peter Danenberg")
  (category data)
  (license "BSD")
- (depends aima
-          cock
+ (depends cock
           debug
+          define-record-and-printer
           miscmacros
           vector-lib)
  (test-depends test)
