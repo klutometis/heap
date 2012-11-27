@@ -129,7 +129,7 @@ overflow.")
     (make-max-heap (initial-heap-size)))
    ((initial-heap-size)
     (make-heap >
-               =
+               >
                -inf.0
                (make-vector initial-heap-size)
                0
@@ -144,7 +144,7 @@ overflow.")
     (make-min-heap (initial-heap-size)))
    ((initial-heap-size)
     (make-heap <
-               =
+               >
                +inf.0
                (make-vector initial-heap-size)
                0
