@@ -1,3 +1,4 @@
+* TODO Some reasonable error when we take the extremum of an empty heap.
 * TODO =heap-fold=, =heap-merge=, &c.?
   What about =heap-map=, =heap-for-each=, =heap-filter=, =heap-copy=?
 * TODO Simplify the API with key + datum and multiple values.
