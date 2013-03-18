@@ -1,4 +1,7 @@
-* TODO Some reasonable error when we take the extremum of an empty heap.
+* DONE Some reasonable error when we take the extremum of an empty heap.
+  CLOSED: [2013-03-18 Mon 13:59]
+  - CLOSING NOTE [2013-03-18 Mon 13:59] \\
+    We had it for =heap-extract-extremum!= but not for =heap-extremum=.
 * TODO Need a =heap-size=.
 * TODO =heap-fold=, =heap-merge=, &c.?
   What about =heap-map=, =heap-for-each=, =heap-filter=, =heap-copy=?
