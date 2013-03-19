@@ -255,3 +255,46 @@ otherwise, adjust its key."
     (if i
         (heap-delete!/index heap i)
         (error "Datum not found -- HEAP-DELETE!"))))
+
+(define (element-copy element)
+  (make-element (element-key element)
+                (element-datum element)))
+
+(define (heap-copy heap)
+  (let ((copy (make-heap
+               (heap->? heap)
+               (heap-<? heap)
+               (heap-inf heap)
+               (make-vector (heap-length heap))
+               (heap-size heap)
+               (hash-table-copy (heap-membership heap)))))
+    (vector-for-each
+     (lambda (i x)
+       (let ((element (vector-ref (heap-data heap) i)))
+         (when (element? element)
+           (vector-set! (heap-data copy) i (element-copy element)))))
+     (heap-data heap))
+    copy))
+
+(define (heap->list heap)
+  @("Convert the heap into a key-sorted list of values by iteratively
+extracting the extremum; see also [[heap->alist]]."
+    (heap "The heap to convert")
+    (@to "list"))
+  ;; Or can we work on the data directly?
+  (let ((heap (heap-copy heap)))
+    (do ((list '() (cons (heap-extract-extremum! heap) list)))
+        ((heap-empty? heap) list))))
+
+(define (heap->alist heap)
+  @("Convert the heap into a key-sorted list of key-value pairs by iteratively extracting the extremum; see also [[heap->list]]."
+    (heap "The heap to convert")
+    (@to "alist"))
+  (let ((heap (heap-copy heap)))
+    (do ((list
+          '()
+          (let ((datum (heap-extremum heap)))
+            (alist-cons (heap-key heap datum)
+                        (heap-extract-extremum! heap)
+                        list))))
+        ((heap-empty? heap) list))))
