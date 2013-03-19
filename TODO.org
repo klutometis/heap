@@ -1,3 +1,58 @@
+* DONE =heap->list=
+  CLOSED: [2013-03-19 Tue 13:28]
+  #+BEGIN_SRC scheme
+    (use cock
+         debug
+         define-record-and-printer
+         loops
+         vector-lib)
+    
+    (include "heap.scm")
+    (include "heap-core.scm")
+    
+    (define (element-copy element)
+      (make-element (element-key element)
+                    (element-datum element)))
+    
+    (define (heap-copy heap)
+      (let ((copy (make-heap
+                   (heap->? heap)
+                   (heap-<? heap)
+                   (heap-inf heap)
+                   (make-vector (heap-length heap))
+                   (heap-size heap)
+                   (hash-table-copy (heap-membership heap)))))
+        (vector-for-each
+         (lambda (i x)
+           (let ((element (vector-ref (heap-data heap) i)))
+             (when (element? element)
+               (vector-set! (heap-data copy) i (element-copy element)))))
+         (heap-data heap))
+        copy))
+    
+    (define (heap->list heap)
+      ;; Or can we work on the data directly?
+      (let ((heap (heap-copy heap)))
+        (do ((list '() (cons (heap-extract-extremum! heap) list)))
+            ((heap-empty? heap) list))))
+    
+    (define (heap->alist heap)
+      (let ((heap (heap-copy heap)))
+        (do ((list
+              '()
+              (let ((datum (heap-extremum heap)))
+                (alist-cons (heap-key heap datum)
+                            (heap-extract-extremum! heap)
+                            list))))
+            ((heap-empty? heap) list))))
+    
+    (let ((heap (make-max-heap)))
+      (do-times i 10 (let ((x (random 1000))) (heap-insert! heap x x)))
+      (debug
+       (heap->list heap)
+       (heap->alist heap)
+       heap))
+  #+END_SRC
 * TODO Some reasonable error when we take the extremum of an empty heap.
 * TODO Need a =heap-size=.
 * TODO =heap-fold=, =heap-merge=, &c.?
