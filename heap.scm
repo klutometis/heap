@@ -5,6 +5,8 @@
    make-heap
    make-max-heap
    make-min-heap
+   heap->alist
+   heap->list
    heap-change-key!
    heap-delete!
    heap-empty?
@@ -23,6 +25,7 @@
   (use define-record-and-printer
        debug
        miscmacros
+       srfi-1
        srfi-69
        vector-lib)
 
