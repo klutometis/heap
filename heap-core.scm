@@ -1,9 +1,3 @@
-@(title "Heap")
-@(description "Mutable heap with priority-queue functions and O(1) membership-testing, which is useful for implementing e.g. A*")
-@(author "Peter Danenberg")
-@(username "klutometis")
-@(email "pcd@roxygen.org")
-
 (define-record-and-printer heap
   @("The heap data-structure"
     (>? "Greater-than relation for keys")

@@ -1,6 +1,6 @@
-== Heap
+== heap
 
-Mutable heap with priority-queue functions and O(1) membership-testing, which is useful for implementing e.g. A*
+Mutable heap with priority-queue operations and O(1) membership-testing
 [[toc:]]
 === {{heap}}
 <record>heap</record>
@@ -53,7 +53,7 @@ Make a max-heap.
      (make-heap
        >
        <
-       -inf
+       -inf.0
        (make-vector initial-heap-size)
        0
        (make-hash-table)))))
@@ -70,7 +70,7 @@ Make a min-heap.
      (make-heap
        <
        >
-       +inf
+       +inf.0
        (make-vector initial-heap-size)
        0
        (make-hash-table)))))
@@ -165,7 +165,8 @@ Convert the heap into a key-sorted list of key-value pairs by iteratively extrac
 ==== Author
 
 [[/users/klutometis|Peter Danenberg]]
-
+==== Repository
+[[https://github.com/klutometis/heap]]
 ==== License
 BSD
 ==== Dependencies
