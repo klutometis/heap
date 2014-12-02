@@ -1,11 +1,8 @@
-(include "setup-helper")
+(use cock setup-helper-mod)
 
 (setup-shared-extension-module
  'heap
- (extension-version "0.4.9")
+ (extension-version "0.4.10")
  compile-options: '(-X cock))
 
-(handle-exceptions exn
-  (warning "Not generating documentation")
-  (include "setup-helper-cock")
-  (run-cock -o heap.wiki heap-core.scm))
+(run-cock -o heap.wiki heap-core.scm)
