@@ -23,7 +23,6 @@
   (import chicken scheme)
 
   (use define-record-and-printer
-       debug
        miscmacros
        srfi-1
        srfi-69

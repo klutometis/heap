@@ -1,4 +1,4 @@
-(use debug heap test)
+(use heap test)
 
 (define (figure-6.2)
   (let ((heap (make-max-heap)))
