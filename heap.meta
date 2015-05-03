@@ -5,8 +5,8 @@
  (repo "https://github.com/klutometis/heap")
  (category data)
  (license "BSD")
- (depends cock
-          define-record-and-printer
+ (depends define-record-and-printer
+          (hahn "0.9.3")
           miscmacros
           vector-lib)
  (test-depends test)
