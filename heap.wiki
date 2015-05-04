@@ -171,7 +171,7 @@ Convert the heap into a key-sorted list of key-value pairs by iteratively extrac
 BSD
 ==== Dependencies
 * [[define-record-and-printer]]
-* [[(hahn 0.9.3)]]
+* [[hahn]]
 * [[miscmacros]]
 * [[vector-lib]]
 
@@ -196,6 +196,7 @@ BSD
 ; [[https://github.com/klutometis/heap/releases/tag/0.4.9|0.4.9]] : heap->list, heap->alist
 ; [[https://github.com/klutometis/heap/releases/tag/0.4.10|0.4.10]] : Remove the dependency on setup-helper-cock.
 ; [[https://github.com/klutometis/heap/releases/tag/0.4.11|0.4.11]] : Remove debug.
+; [[https://github.com/klutometis/heap/releases/tag/0.4.12|0.4.12]] : Use hahn.
 ==== Colophon
 
 Documented by [[/egg/hahn|hahn]].
